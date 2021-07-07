@@ -1,0 +1,14 @@
+.comment {
+    background-color: #fff;
+    padding: 10px;
+
+    border-top: gray 1px solid;
+}
+
+.comment__author {
+    color: #003151;
+}
+
+.comment__body {
+    font-size: 14px;
+}

@@ -1,0 +1,17 @@
+.container {
+    width: 1144px;
+    margin: 0 auto;
+}
+
+.grid-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    /*grid-auto-rows: 500px;*/
+    gap: 30px;
+}
+
+.news-item {
+    background-color: #fff;
+    padding: 15px;
+    border-radius: 6px  ;
+}
