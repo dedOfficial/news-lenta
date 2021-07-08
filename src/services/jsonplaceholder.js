@@ -7,9 +7,8 @@ export default class JSONPlaceholder {
         return await res.json();
     }
 
-    getAllPosts = async () => {
-        const data = await this.#getResources('posts');
-
+    getAllPosts = async (pageNumber) => {
+        let data = await this.#getResources('posts');
         return data.map(this.#transformPostData);
     }
 

@@ -1,5 +1,7 @@
 import React, {Component} from "react";
 
+import Pagination from "rc-pagination";
+
 import './App.css';
 
 import SearchForm from "./searchForm";
@@ -16,7 +18,8 @@ export default class App extends Component {
         postList: [],
         isShowModal: false,
         postData: [],
-        query: ''
+        query: '',
+        activePage: 1
     }
 
 
@@ -24,9 +27,15 @@ export default class App extends Component {
         this.setPostList();
     }
 
+    setActivePage = (pageNum) => {
+        this.setState({
+            activePage: pageNum
+        })
+    }
+
     setPostList = async () => {
         try {
-            const data = await this.db.getAllPosts();
+            const data = await this.db.getAllPosts(1);
             this.setState({
                 postList: data
             });
@@ -40,6 +49,7 @@ export default class App extends Component {
             query: newQuery
         })
     }
+
 
     showModalHandler = ([postId, postTitle, postBody]) => {
         return (
@@ -66,7 +76,7 @@ export default class App extends Component {
     }
 
     render() {
-        const {postList, isShowModal, postData, query} = this.state;
+        const {postList, isShowModal, postData, query, activePage} = this.state;
 
         const renderedNews = postList
             .filter(({title, body}) => title.includes(query) || body.includes(query))
@@ -108,6 +118,13 @@ export default class App extends Component {
                                 (query ? `Не найдено результатов по запросу "${query}"` : "Загрузка...")
                         }
                     </div>
+                    <Pagination
+                        pageSize={10}
+                        onChange={this.setActivePage}
+                        total={postList.length}
+                        current={activePage}
+                        className="page-panel"
+                    />
                 </div>
                 {isShowModal && this.showModalHandler(postData)}
             </React.Fragment>

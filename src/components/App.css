@@ -10,4 +10,7 @@
     gap: 30px;
 }
 
-
+.page-panel {
+    display: flex;
+    justify-content: space-between;
+}
