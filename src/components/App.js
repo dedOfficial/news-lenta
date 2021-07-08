@@ -6,12 +6,16 @@ import SearchForm from "./searchForm";
 
 import JSONPlaceholder from "../services/jsonplaceholder";
 import NewsItem from "./newsItem";
+import Overlay from "./overlay";
+import Modal from "./modal";
 
 export default class App extends Component {
     db = new JSONPlaceholder();
 
     state = {
-        postList: []
+        postList: [],
+        isShowModal: false,
+        postData: []
     }
 
     componentDidMount() {
@@ -29,8 +33,32 @@ export default class App extends Component {
         }
     }
 
+    showModalHandler = ([postId, postTitle, postBody]) => {
+        return (
+            <Overlay>
+                <Modal
+                    postId={postId}
+                    postTitle={postTitle}
+                    postBody={postBody}
+                    isShowFullContent={true}
+                    closeModalHandler={() => this.setShowModal()}
+                />
+            </Overlay>
+        );
+    }
+
+    setShowModal = (postData) => {
+        this.setState({
+            postData
+        })
+        this.setState(({isShowModal}) => ({
+            isShowModal: !isShowModal,
+        }));
+
+    }
+
     render() {
-        const {postList} = this.state;
+        const {postList, isShowModal, postData} = this.state;
 
         return (
             <React.Fragment>
@@ -40,17 +68,24 @@ export default class App extends Component {
                     <div className="grid-container">
                         {postList.map(({id, title, body}) => {
                             return (
-                                <NewsItem
+                                <div
                                     key={id}
-                                    postId={id}
-                                    postTitle={title}
-                                    postBody={body}
-                                    isShowFullContent={false}
-                                />
+                                    onClick={() => {
+                                        this.setShowModal([id, title, body])
+                                    }}
+                                >
+                                    <NewsItem
+                                        postId={id}
+                                        postTitle={title}
+                                        postBody={body}
+                                        isShowFullContent={false}
+                                    />
+                                </div>
                             );
                         })}
                     </div>
                 </div>
+                {isShowModal && this.showModalHandler(postData)}
             </React.Fragment>
         );
     }

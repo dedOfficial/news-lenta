@@ -1,25 +1,20 @@
 import React from "react";
 
 import './Modal.css';
-import PostItem from "../postItem";
-import Comment from "../commentItem";
+import NewsItem from "../newsItem";
 
-export default function Modal() {
+export default function Modal(props) {
+    const {closeModalHandler, ...newsItemProps} = props;
+
     return (
         <section className="modal">
-            <div className="modal__close">&times;</div>
-            <article className="modal__posts-wrap">
-                <PostItem/>
-            </article>
-            <article className="modal__comments-wrap">
-                <Comment/>
-                <Comment/>
-                <Comment/>
-                <Comment/>
-                <Comment/>
-                <Comment/>
-                <Comment/>
-            </article>
+            <div
+                className="modal__close"
+                onClick={closeModalHandler}
+            >&times;</div>
+            <NewsItem
+                {...newsItemProps}
+            />
         </section>
     );
 }
