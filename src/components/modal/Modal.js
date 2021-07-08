@@ -2,6 +2,7 @@ import React from "react";
 
 import './Modal.css';
 import NewsItem from "../newsItem";
+import PropTypes from "prop-types";
 
 export default function Modal(props) {
     const {closeModalHandler, ...newsItemProps} = props;
@@ -17,4 +18,14 @@ export default function Modal(props) {
             />
         </section>
     );
+}
+Modal.propTypes = {
+    postId: PropTypes.number,
+    postTitle: PropTypes.string,
+    postBody: PropTypes.string,
+    isShowFullContent: PropTypes.bool,
+    closeModalHandler: PropTypes.func
+}
+Modal.defaultProps = {
+    isShowFullContent: true
 }

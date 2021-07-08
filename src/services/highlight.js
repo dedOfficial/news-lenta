@@ -10,9 +10,9 @@ export default function highlightFiltered(filter, str) {
         return str.split(regexp).map((s, index, arr) => {
             if(index < arr.length - 1) {
                 const c = matchValue.shift();
-                return <div>
-                    {s}<mark>{c}</mark>
-                </div>
+                return <span>
+                    {s}<span style={{backgroundColor: "yellow", whiteSpace: "nowrap"}}>{c}</span>
+                </span>
             }
             return s;
         })

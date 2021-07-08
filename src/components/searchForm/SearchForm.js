@@ -1,6 +1,7 @@
 import React from "react";
 
 import './SearchForm.css';
+import PropTypes from "prop-types";
 
 export default function SearchForm({searchHandler}) {
     return (
@@ -23,4 +24,7 @@ export default function SearchForm({searchHandler}) {
             </form>
         </div>
     );
+}
+SearchForm.propTypes = {
+    searchHandler: PropTypes.func
 }

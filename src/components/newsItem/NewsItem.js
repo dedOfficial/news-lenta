@@ -4,8 +4,20 @@ import './NewsItem.css';
 import PostItem from "../postItem";
 import Comment from "../commentItem";
 import JSONPlaceholder from "../../services/jsonplaceholder";
+import PropTypes from "prop-types";
 
 export default class NewsItem extends Component {
+    static propTypes = {
+        postId: PropTypes.number,
+        postTitle: PropTypes.string,
+        postBody: PropTypes.string,
+        isShowFullContent: PropTypes.bool,
+        query: PropTypes.string
+    }
+    static defaultProps = {
+        isShowFullContent: false
+    }
+
     db = new JSONPlaceholder();
 
     state = {
@@ -27,28 +39,22 @@ export default class NewsItem extends Component {
         }
     }
 
-    commentsMarkup = null
-
     createCommentsContent = (flag) => {
         const {commentsList} = this.state;
         const {query} = this.props
         if (flag) {
-            this.commentsMarkup = commentsList.map(({id, email, body}) => (
+            return commentsList.map(({id, email, body}) => (
                 <Comment key={id} commentEmail={email} commentBody={body} query={query}/>
             ));
         } else {
             const {email, body} = commentsList[commentsList.length - 1];
-            this.commentsMarkup = <Comment commentEmail={email} commentBody={body} query={query}/>
+            return <Comment commentEmail={email} commentBody={body} query={query}/>
         }
     }
 
     render() {
         const {postTitle, postBody, isShowFullContent, query} = this.props;
         const {commentsList} = this.state;
-
-        if (commentsList.length !== 0) {
-            this.createCommentsContent(isShowFullContent);
-        }
 
         return (
             <div className="news-item">
@@ -58,7 +64,7 @@ export default class NewsItem extends Component {
                     commentsCount={commentsList.length}
                     query={query}
                 />
-                {this.commentsMarkup}
+                {commentsList.length ? this.createCommentsContent(isShowFullContent) : "Загрузка..."}
             </div>
         );
     }

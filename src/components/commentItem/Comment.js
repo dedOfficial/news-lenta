@@ -2,6 +2,7 @@ import React from "react";
 
 import './Comment.css';
 import highlightFiltered from "../../services/highlight";
+import PropTypes from "prop-types";
 
 export default function Comment({commentEmail, commentBody, query}) {
     return (
@@ -12,4 +13,9 @@ export default function Comment({commentEmail, commentBody, query}) {
             </p>
         </article>
     );
+}
+Comment.propTypes = {
+    commentEmail: PropTypes.string,
+    commentBody: PropTypes.string,
+    query: PropTypes.string
 }

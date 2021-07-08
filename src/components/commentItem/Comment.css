@@ -11,4 +11,6 @@
 
 .comment__body {
     font-size: 14px;
+    padding: 0 10px;
+    margin-top: 10px;
 }

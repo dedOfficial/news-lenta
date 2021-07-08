@@ -12,5 +12,28 @@
 
 .page-panel {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
+    align-items: center;
+    list-style-type: none;
+}
+
+.page-panel li {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    line-height: 0;
+    width: 35px;
+    height: 35px;
+    border: 1px solid black;
+    text-align: center;
+    cursor: pointer;
+}
+
+.page-panel .rc-pagination-item-active {
+    background-color: dodgerblue;
+    color: #ffffff;
+}
+
+.page-panel .rc-pagination-options {
+    display: none;
 }

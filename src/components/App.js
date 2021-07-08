@@ -1,11 +1,7 @@
 import React, {Component} from "react";
-
 import Pagination from "rc-pagination";
-
 import './App.css';
-
 import SearchForm from "./searchForm";
-
 import JSONPlaceholder from "../services/jsonplaceholder";
 import NewsItem from "./newsItem";
 import Overlay from "./overlay";
@@ -22,11 +18,12 @@ export default class App extends Component {
         activePage: 1
     }
 
-
+    // mounting
     componentDidMount() {
         this.setPostList();
     }
 
+    // state setters
     setActivePage = (pageNum) => {
         this.setState({
             activePage: pageNum
@@ -50,22 +47,13 @@ export default class App extends Component {
         })
     }
 
-
-    showModalHandler = ([postId, postTitle, postBody]) => {
-        return (
-            <Overlay>
-                <Modal
-                    postId={postId}
-                    postTitle={postTitle}
-                    postBody={postBody}
-                    isShowFullContent={true}
-                    closeModalHandler={() => this.setShowModal()}
-                />
-            </Overlay>
-        );
-    }
-
     setShowModal = (postData) => {
+        if (document.body.style.overflow !== "hidden") {
+            document.body.style.overflow = "hidden";
+        } else {
+            document.body.style.overflow = "";
+        }
+
         this.setState({
             postData
         })
@@ -75,57 +63,93 @@ export default class App extends Component {
 
     }
 
-    render() {
-        const {postList, isShowModal, postData, query, activePage} = this.state;
+    // form handler
+    searchHandler = (e) => {
+        e.preventDefault();
+        const formData = new FormData(e.target);
+        const query = Object.fromEntries(formData.entries()).search;
+        this.setQuery(query);
+    }
 
-        const renderedNews = postList
+    // markup renderers
+    showModalHandler = ([postId, postTitle, postBody]) => {
+        return (
+            <Overlay>
+                <Modal
+                    postId={postId}
+                    postTitle={postTitle}
+                    postBody={postBody}
+                    closeModalHandler={() => this.setShowModal()}
+                />
+            </Overlay>
+        );
+    }
+
+    renderNews = () => {
+        const {postList, query, activePage} = this.state;
+        return postList
             .filter(({title, body}) => title.includes(query) || body.includes(query))
-            .map(({id, title, body}) => {
-                return (
-                    <div
-                        key={id}
-                        onClick={() => {
-                            this.setShowModal([id, title, body])
-                        }}
-                    >
-                        <NewsItem
-                            postId={id}
-                            postTitle={title}
-                            postBody={body}
-                            isShowFullContent={false}
-                            query={query}
-                        />
-                    </div>
-                );
+            .map(({id, title, body}, index) => {
+                if (index >= activePage * 10 - 10 && index <= activePage * 10) {
+                    return (
+                        <div
+                            key={id}
+                            onClick={() => {
+                                this.setShowModal([id, title, body])
+                            }}
+                        >
+                            <NewsItem
+                                postId={id}
+                                postTitle={title}
+                                postBody={body}
+                                query={query}
+                            />
+                        </div>
+                    );
+                }
+                return null;
             });
 
+    }
+
+    renderPagePanel = (total) => (
+        <Pagination
+            pageSize={10}
+            onChange={this.setActivePage}
+            total={total}
+            current={this.state.activePage}
+            className="page-panel"
+            prevIcon="<"
+            nextIcon=">"
+            jumpPrevIcon="<<"
+            jumpNextIcon=">>"
+        />
+    );
+
+
+    render() {
+        const {isShowModal, postData, query} = this.state;
+
+        const renderedNews = this.renderNews();
         return (
             <React.Fragment>
                 <div className="container">
                     <h1>News lenta</h1>
-                    <SearchForm
-                        searchHandler={(e) => {
-                            e.preventDefault();
-                            const formData = new FormData(e.target);
-                            const query = Object.fromEntries(formData.entries()).search;
-                            this.setQuery(query);
-                        }}
-                    />
+
+                    <SearchForm searchHandler={this.searchHandler}/>
+
+                    {this.renderPagePanel(renderedNews.length)}
+
                     <div className="grid-container">
-                        {
-                            renderedNews.length ?
-                                renderedNews :
-                                (query ? `Не найдено результатов по запросу "${query}"` : "Загрузка...")
-                        }
+                        {renderedNews.length ?
+                            renderedNews :
+                            (query ? `Не найдено результатов по запросу "${query}"` : "Загрузка...")}
                     </div>
-                    <Pagination
-                        pageSize={10}
-                        onChange={this.setActivePage}
-                        total={postList.length}
-                        current={activePage}
-                        className="page-panel"
-                    />
+
+                    {this.renderPagePanel(renderedNews.length)}
+
                 </div>
+
                 {isShowModal && this.showModalHandler(postData)}
             </React.Fragment>
         );
