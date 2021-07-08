@@ -10,6 +10,11 @@
     gap: 30px;
 }
 
+h1 {
+    text-align: center;
+    text-transform: uppercase;
+}
+
 .page-panel {
     display: flex;
     justify-content: center;
