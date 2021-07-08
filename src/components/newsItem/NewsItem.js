@@ -21,11 +21,13 @@ export default class NewsItem extends Component {
     db = new JSONPlaceholder();
 
     state = {
-        commentsList: []
+        commentsList: [],
+        postPhoto: {}
     }
 
     componentDidMount() {
         this.setCommentsList();
+        this.setPostPhoto();
     }
 
     setCommentsList = async () => {
@@ -36,6 +38,17 @@ export default class NewsItem extends Component {
             });
         } catch (e) {
             console.error(e);
+        }
+    }
+
+    setPostPhoto = async () => {
+        try {
+            const data = await this.db.getPhoto(this.props.postId);
+            this.setState({
+                postPhoto: data
+            })
+        } catch (e) {
+            console.error(e)
         }
     }
 
@@ -54,7 +67,9 @@ export default class NewsItem extends Component {
 
     render() {
         const {postTitle, postBody, isShowFullContent, query} = this.props;
-        const {commentsList} = this.state;
+        const {commentsList, postPhoto} = this.state;
+
+        const {url, thumbnailUrl} = postPhoto;
 
         return (
             <div className="news-item">
@@ -63,6 +78,7 @@ export default class NewsItem extends Component {
                     postBody={postBody}
                     commentsCount={commentsList.length}
                     query={query}
+                    postImageURL={isShowFullContent ? url : thumbnailUrl}
                 />
                 {commentsList.length ? this.createCommentsContent(isShowFullContent) : "Загрузка..."}
             </div>

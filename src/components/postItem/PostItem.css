@@ -10,12 +10,20 @@
     font-size: 20px;
 }
 
+.post__image {
+    min-width: 150px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
 .post__footer {
     padding: 15px 0;
     border-top: 1px solid grey;
 }
 
-img {
+.post__footer img {
     width: 20px;
 }
 

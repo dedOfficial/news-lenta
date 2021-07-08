@@ -8,13 +8,18 @@ export default class JSONPlaceholder {
     }
 
     getAllPosts = async (pageNumber) => {
-        let data = await this.#getResources('posts');
+        const data = await this.#getResources('posts');
         return data.map(this.#transformPostData);
     }
 
     getPost = async (id) => {
         const post = await this.#getResources(`posts/${id}`)
         return this.#transformPostData(post);
+    }
+
+    getPhoto = async (id) => {
+        const photo = await this.#getResources(`photos/${id}`)
+        return this.#transformPhotoData(photo);
     }
 
     getCommentsByPostId = async (postId) => {
@@ -29,5 +34,9 @@ export default class JSONPlaceholder {
 
     #transformCommentData = ({id, email, body}) => {
         return {id, email, body};
+    }
+
+    #transformPhotoData = ({thumbnailUrl, url}) => {
+        return {thumbnailUrl, url};
     }
 }

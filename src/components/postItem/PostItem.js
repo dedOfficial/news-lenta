@@ -5,7 +5,7 @@ import logo from './speech-bubble.svg';
 import highlightFiltered from "../../services/highlight";
 import PropTypes from "prop-types";
 
-export default function PostItem({postTitle, postBody, commentsCount, query}) {
+export default function PostItem({postTitle, postBody, commentsCount, query, postImageURL}) {
     return (
         <section className="post">
             <header className="post__header">
@@ -15,6 +15,9 @@ export default function PostItem({postTitle, postBody, commentsCount, query}) {
                 <p className="post__text">
                     {highlightFiltered(query, postBody)}
                 </p>
+                <div className="post__image">
+                    <img src={postImageURL} alt={postTitle.split(' ')[0]}/>
+                </div>
             </main>
             <footer className="post__footer">
                 <div className="post__statistic">
@@ -29,8 +32,10 @@ PostItem.propTypes = {
     postTitle: PropTypes.string,
     postBody: PropTypes.string,
     commentsCount: PropTypes.number,
-    query: PropTypes.string
+    query: PropTypes.string,
+    postImageURL: PropTypes.string
 }
 PostItem.defaultProps = {
-    postBody: '***No Text***'
+    postBody: '***No Text***',
+    postImageURL: null
 }
