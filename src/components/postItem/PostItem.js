@@ -8,17 +8,17 @@ export default function PostItem({postTitle, postBody, commentsCount}) {
     return (
         <section className="post">
             <header className="post__header">
-                <h4 className="post__title">{postTitle || "First Time Post!"}</h4>
+                <h4 className="post__title">{postTitle}</h4>
             </header>
             <main className="post__body">
                 <p className="post__text">
-                    {postBody || "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Alias aut dolor eaque eius, illo minima nobis optio totam? Ad debitis deserunt distinctio error reiciendis tempora tempore. Exercitationem illum nihil veritatis."}
+                    {postBody}
                 </p>
             </main>
             <footer className="post__footer">
                 <div className="post__statistic">
                     <img src={logo} alt="comments"/>
-                    <span>{commentsCount || '23'}</span>
+                    <span>{commentsCount}</span>
                 </div>
             </footer>
         </section>

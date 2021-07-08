@@ -2,11 +2,10 @@ import React, {Component} from "react";
 
 import './App.css';
 
-import PostItem from "./postItem";
-import Comment from "./commentItem";
 import SearchForm from "./searchForm";
 
 import JSONPlaceholder from "../services/jsonplaceholder";
+import NewsItem from "./newsItem";
 
 export default class App extends Component {
     db = new JSONPlaceholder();
@@ -33,8 +32,6 @@ export default class App extends Component {
     render() {
         const {postList} = this.state;
 
-
-
         return (
             <React.Fragment>
                 <div className="container">
@@ -43,13 +40,13 @@ export default class App extends Component {
                     <div className="grid-container">
                         {postList.map(({id, title, body}) => {
                             return (
-                                <div key={id} className="news-item">
-                                    <PostItem
-                                        postTitle={title}
-                                        postBody={body}
-                                    />
-                                    <Comment/>
-                                </div>
+                                <NewsItem
+                                    key={id}
+                                    postId={id}
+                                    postTitle={title}
+                                    postBody={body}
+                                    isShowFullContent={false}
+                                />
                             );
                         })}
                     </div>
