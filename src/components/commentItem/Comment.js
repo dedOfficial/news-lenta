@@ -1,13 +1,14 @@
 import React from "react";
 
 import './Comment.css';
+import highlightFiltered from "../../services/highlight";
 
-export default function Comment({commentEmail, commentBody}) {
+export default function Comment({commentEmail, commentBody, query}) {
     return (
         <article className="comment">
-            <h4 className="comment__author">{commentEmail}</h4>
+            <h4 className="comment__author">{highlightFiltered(query, commentEmail)}</h4>
             <p className="comment__body">
-                {commentBody}
+                {highlightFiltered(query, commentBody)}
             </p>
         </article>
     );

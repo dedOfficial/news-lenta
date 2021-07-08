@@ -15,8 +15,10 @@ export default class App extends Component {
     state = {
         postList: [],
         isShowModal: false,
-        postData: []
+        postData: [],
+        query: ''
     }
+
 
     componentDidMount() {
         this.setPostList();
@@ -31,6 +33,12 @@ export default class App extends Component {
         } catch (e) {
             console.error(e);
         }
+    }
+
+    setQuery = (newQuery) => {
+        this.setState({
+            query: newQuery
+        })
     }
 
     showModalHandler = ([postId, postTitle, postBody]) => {
@@ -58,31 +66,47 @@ export default class App extends Component {
     }
 
     render() {
-        const {postList, isShowModal, postData} = this.state;
+        const {postList, isShowModal, postData, query} = this.state;
+
+        const renderedNews = postList
+            .filter(({title, body}) => title.includes(query) || body.includes(query))
+            .map(({id, title, body}) => {
+                return (
+                    <div
+                        key={id}
+                        onClick={() => {
+                            this.setShowModal([id, title, body])
+                        }}
+                    >
+                        <NewsItem
+                            postId={id}
+                            postTitle={title}
+                            postBody={body}
+                            isShowFullContent={false}
+                            query={query}
+                        />
+                    </div>
+                );
+            });
 
         return (
             <React.Fragment>
                 <div className="container">
                     <h1>News lenta</h1>
-                    <SearchForm/>
+                    <SearchForm
+                        searchHandler={(e) => {
+                            e.preventDefault();
+                            const formData = new FormData(e.target);
+                            const query = Object.fromEntries(formData.entries()).search;
+                            this.setQuery(query);
+                        }}
+                    />
                     <div className="grid-container">
-                        {postList.map(({id, title, body}) => {
-                            return (
-                                <div
-                                    key={id}
-                                    onClick={() => {
-                                        this.setShowModal([id, title, body])
-                                    }}
-                                >
-                                    <NewsItem
-                                        postId={id}
-                                        postTitle={title}
-                                        postBody={body}
-                                        isShowFullContent={false}
-                                    />
-                                </div>
-                            );
-                        })}
+                        {
+                            renderedNews.length ?
+                                renderedNews :
+                                (query ? `Не найдено результатов по запросу "${query}"` : "Загрузка...")
+                        }
                     </div>
                 </div>
                 {isShowModal && this.showModalHandler(postData)}
