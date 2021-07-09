@@ -14,7 +14,7 @@ export default class App extends Component {
         postList: [],
         isShowModal: false,
         postData: [],
-        query: '',
+        query: window.localStorage.getItem('query') || '',
         activePage: parseInt(window.localStorage.getItem('activePage')) || 1
     }
 
@@ -25,9 +25,9 @@ export default class App extends Component {
 
     // state setters
     setActivePage = (pageNum) => {
-        if (!this.state.query) {
-            window.localStorage.setItem('activePage', pageNum);
-        }
+
+        window.localStorage.setItem('activePage', pageNum);
+
         this.setState({
             activePage: pageNum
         })
@@ -45,6 +45,7 @@ export default class App extends Component {
     }
 
     setQuery = (newQuery) => {
+        window.localStorage.setItem('query', newQuery);
         this.setState({
             query: newQuery
         })
@@ -70,10 +71,13 @@ export default class App extends Component {
     searchHandler = (e) => {
         e.preventDefault();
         const formData = new FormData(e.target);
-        const query = Object.fromEntries(formData.entries()).search;
-        this.setQuery(query);
+        let query = Object.fromEntries(formData.entries()).search;
+        this.setQuery(
+            query
+                .replace(/^[%&',;=?$\x22 ]+/, '')
+                .replace(/[%&',;=?$\x22 ]+$/, '')
+        );
         this.setActivePage(1);
-        e.target.reset();
     }
 
     // markup renderers
@@ -136,6 +140,7 @@ export default class App extends Component {
         const {isShowModal, postData, query} = this.state;
 
         const renderedNews = this.renderNews();
+
         return (
             <React.Fragment>
                 <div className="container">
