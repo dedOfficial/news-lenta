@@ -15,7 +15,7 @@ export default class App extends Component {
         isShowModal: false,
         postData: [],
         query: '',
-        activePage: 1
+        activePage: parseInt(window.localStorage.getItem('activePage')) || 1
     }
 
     // mounting
@@ -25,6 +25,7 @@ export default class App extends Component {
 
     // state setters
     setActivePage = (pageNum) => {
+        window.localStorage.setItem('activePage', pageNum);
         this.setState({
             activePage: pageNum
         })
