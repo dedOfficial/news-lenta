@@ -25,7 +25,9 @@ export default class App extends Component {
 
     // state setters
     setActivePage = (pageNum) => {
-        window.localStorage.setItem('activePage', pageNum);
+        if (!this.state.query) {
+            window.localStorage.setItem('activePage', pageNum);
+        }
         this.setState({
             activePage: pageNum
         })
@@ -70,6 +72,8 @@ export default class App extends Component {
         const formData = new FormData(e.target);
         const query = Object.fromEntries(formData.entries()).search;
         this.setQuery(query);
+        this.setActivePage(1);
+        e.target.reset();
     }
 
     // markup renderers
