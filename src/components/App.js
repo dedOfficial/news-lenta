@@ -14,7 +14,7 @@ export default class App extends Component {
         postList: [],
         isShowModal: false,
         postData: [],
-        query: window.localStorage.getItem('query') || '',
+        query: '',
         activePage: parseInt(window.localStorage.getItem('activePage')) || 1
     }
 
@@ -45,7 +45,6 @@ export default class App extends Component {
     }
 
     setQuery = (newQuery) => {
-        window.localStorage.setItem('query', newQuery);
         this.setState({
             query: newQuery
         })
@@ -99,7 +98,7 @@ export default class App extends Component {
         return postList
             .filter(({title, body}) => title.includes(query) || body.includes(query))
             .map(({id, title, body}, index) => {
-                if (index >= activePage * 10 - 10 && index <= activePage * 10) {
+                if (index >= activePage * 10 - 10 && index < activePage * 10) {
                     return (
                         <div
                             key={id}
@@ -132,6 +131,8 @@ export default class App extends Component {
             nextIcon=">"
             jumpPrevIcon="<<"
             jumpNextIcon=">>"
+            showTitle={false}
+            showQuickJumper={true}
         />
     );
 
