@@ -1,5 +1,5 @@
 export default class JSONPlaceholder {
-    #apiBase = 'https://jsonplaceholder.typicode.com/';
+    #apiBase = 'http://localhost:3001/api/';
 
     #getResources = async (page = '') => {
         const url = this.#apiBase + page;
@@ -18,12 +18,12 @@ export default class JSONPlaceholder {
     }
 
     getPhoto = async (id) => {
-        const photo = await this.#getResources(`photos/${id}`)
-        return this.#transformPhotoData(photo);
+        const photo = await this.#getResources(`photos/${id}`);
+        return this.#transformPhotoData(photo[0]);
     }
 
     getCommentsByPostId = async (postId) => {
-        const comments = await this.#getResources(`comments?postId=${postId}`)
+        const comments = await this.#getResources(`comments/${postId}`)
 
         return comments.map(this.#transformCommentData);
     }

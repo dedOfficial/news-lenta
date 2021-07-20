@@ -6,7 +6,7 @@ const options = {
     useUnifiedTopology: true
 };
 
-mongoose.connect('mongodb://localhost/newsdb', options);
+mongoose.connect('mongodb+srv://admin:admin@cluster0.yla5d.mongodb.net/newsdb?retryWrites=true&w=majority&sslVerifyCertificate=false', options);
 
 const db = mongoose.connection;
 

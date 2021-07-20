@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 const path = require('path');
 const log = require('./libs/log')(module);
 
@@ -8,6 +9,7 @@ const CommentModel = require('./libs/mongoose').CommentModel;
 
 const app = express();
 
+app.use(cors());
 app.use(express.static(path.join(__dirname, 'public')));
 
 const handleFindData = (req, res, err, data) => {
@@ -75,7 +77,7 @@ app.use((err, req, res, next) => {
     return;
 });
 
-app.listen(3000, () => {
+app.listen(3001, () => {
     log.info('Express server listening on port 3001');
 });
 
