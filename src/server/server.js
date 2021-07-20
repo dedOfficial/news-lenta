@@ -1,13 +1,10 @@
 const express = require('express');
 const path = require('path');
 const log = require('./libs/log')(module);
-const config = require('./libs/config');
 
 const PostModel = require('./libs/mongoose').PostModel;
 const PhotoModel = require('./libs/mongoose').PhotoModel;
 const CommentModel = require('./libs/mongoose').CommentModel;
-
-// console.dir(PostModel);
 
 const app = express();
 

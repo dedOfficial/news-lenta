@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 const log = require('./log')(module);
-const config = require('./config');
 
 const options = {
     useNewUrlParser: true,
