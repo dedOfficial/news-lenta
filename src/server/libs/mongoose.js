@@ -42,10 +42,6 @@ const Comment = new Schema({
     body: { type: String, required: true }
 });
 
-Comment.static('findByPostId', function(postId) { return this.find({ postId }); });
-Post.static('findByIndexId', function(id) { return this.find({ id }); });
-Comment.static('findByIndexId', function(id) { return this.find({ id }); });
-
 const PostModel = mongoose.model('Post', Post);
 const PhotoModel = mongoose.model('Photo', Photo);
 const CommentModel = mongoose.model('Comment', Comment);
