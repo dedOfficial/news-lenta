@@ -15,7 +15,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-const handleFindData = (req, res, err, data) => {
+const handleFindSaveData = (req, res, err, data) => {
     if (!data) {
         res.statusCode = 404;
         return res.send({ error: 'Not found' });
@@ -28,8 +28,7 @@ const handleFindData = (req, res, err, data) => {
     }
 }
 
-
-
+// ############################## GET ###################################
 app.get('/api', (req, res) => {
     res.send('API is running');
 });
@@ -46,7 +45,7 @@ app.get('/api/posts', (req, res) => {
 });
 
 app.get('/api/posts/:id', (req, res) => {
-    return PostModel.find({id: req.params.id}, (err, data) => handleFindData(req, res, err, data));
+    return PostModel.find({id: req.params.id}, (err, data) => handleFindSaveData(req, res, err, data));
 });
 
 app.get('/api/photos', (req, res) => {
@@ -61,17 +60,31 @@ app.get('/api/photos', (req, res) => {
 });
 
 app.get('/api/photos/:id', (req, res) => {
-    return PhotoModel.find({id: req.params.id}, (err, data) => handleFindData(req, res, err, data));
+    return PhotoModel.find({id: req.params.id}, (err, data) => handleFindSaveData(req, res, err, data));
 });
 
 app.get('/api/comments/:postId', (req, res) => {
-    return CommentModel.find({postId: req.params.postId}, (err, data) => handleFindData(req, res, err, data));
+    return CommentModel.find({postId: req.params.postId}, (err, data) => handleFindSaveData(req, res, err, data));
 });
 
+// ################################ POST ######################################
+
 app.post('/api/posts', (req, res) => {
-    console.log(req.body);
-    res.send(req.body);
+    const post = new PostModel(req.body);
+    post.save((err, data) => handleFindSaveData(req, res, err, data));
 });
+
+app.post('/api/photos', (req, res) => {
+    const photo = new PhotoModel(req.body);
+    photo.save((err, data) => handleFindSaveData(req, res, err, data));
+});
+
+app.post('/api/comments', (req, res) => {
+    const comment = new CommentModel(req.body);
+    comment.save((err, data) => handleFindSaveData(req, res, err, data));
+});
+
+// ############################## Listening etc... ###################################
 
 app.use((req, res, next) => {
     res.status(404);
