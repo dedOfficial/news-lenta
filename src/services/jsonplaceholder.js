@@ -7,9 +7,27 @@ export default class JSONPlaceholder {
         return await res.json();
     }
 
+    #postData = async (page = '', data) => {
+        const url = this.#apiBase + page;
+        const fetchOptions = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        }
+        const res = await fetch(url, fetchOptions);
+        return await res.json();
+    }
+
     getAllPosts = async (pageNumber) => {
         const data = await this.#getResources('posts');
         return data.map(this.#transformPostData);
+    }
+
+    postPost = async (newPost) => {
+        const res = await this.#postData('posts', newPost);
+        return res;
     }
 
     getPost = async (id) => {

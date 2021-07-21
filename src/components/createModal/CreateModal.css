@@ -1,0 +1,70 @@
+.modal {
+    width: 50vw;
+    height: 80vh;
+    display: flex;
+    justify-content: center;
+
+    position: relative;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    z-index: 10000;
+
+    background-color: #fff;
+
+    border-radius: 5px;
+    overflow: auto;
+
+    padding: 15px;
+}
+
+.modal__close {
+    position: absolute;
+    top: 0;
+    right: 15px;
+    font-size: 40px;
+    cursor: pointer;
+}
+
+.modal__close:hover, .modal__close:active {
+    color: cadetblue;
+}
+
+.create-form {
+    width: 95%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.create-form .form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: unset;
+    gap: 30px;
+    width: 100%;
+    height: 80%;
+}
+
+.create-form .form .form__control {
+    width: 80%;
+}
+
+input, textarea {
+    width: 100%;
+    height: 100%;
+}
+.form__control textarea {
+    height: 300px;
+    resize: none;
+}
+.form__control input {
+    height: 40px;
+}
+
+.create-form .form__panel {
+    display: flex;
+    justify-content: space-between;
+    /*align-items: center;*/
+}

@@ -2,13 +2,13 @@
     margin-bottom: 15px;
 }
 
-.form {
+.search-form .form {
     display: flex;
     justify-content: space-between;
     /*align-items: center;*/
 }
 
-.form__control {
+.search-form .form__control {
     width: 80%;
     height: 40px;
 }

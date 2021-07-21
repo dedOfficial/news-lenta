@@ -2,6 +2,7 @@ import React from "react";
 
 import './SearchForm.css';
 import PropTypes from "prop-types";
+import Button from '../button';
 
 export default function SearchForm({searchHandler}) {
     return (
@@ -19,7 +20,7 @@ export default function SearchForm({searchHandler}) {
                     />
                 </div>
                 <div className="form__panel">
-                    <button type="submit" className="btn brn_primary">Search</button>
+                    <Button type="submit" text="Search"/>
                 </div>
             </form>
         </div>

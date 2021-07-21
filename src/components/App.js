@@ -6,13 +6,16 @@ import JSONPlaceholder from "../services/jsonplaceholder";
 import NewsItem from "./newsItem";
 import Overlay from "./overlay";
 import Modal from "./modal";
+import Button from './button';
+import CreateModal from './createModal';
 
 export default class App extends Component {
     db = new JSONPlaceholder();
 
     state = {
         postList: [],
-        isShowModal: false,
+        isShowPostDetailModal: false,
+        isShowCreatePostModal: false,
         postData: [],
         query: '',
         activePage: parseInt(window.localStorage.getItem('activePage')) || 1
@@ -50,20 +53,27 @@ export default class App extends Component {
         })
     }
 
-    setShowModal = (postData) => {
+    setShowPostDetailModal = (postData) => {
+        this.setState({
+            postData
+        })
+        this.setState(({isShowPostDetailModal}) => ({
+            isShowPostDetailModal: !isShowPostDetailModal,
+        }));
+    }
+
+    setShowCreatePostModal = () => {
+        this.setState( ({ isShowCreatePostModal }) => ({
+            isShowCreatePostModal: !isShowCreatePostModal
+        }) );
+    }
+
+    toggleDocumentOverflow = () => {
         if (document.body.style.overflow !== "hidden") {
             document.body.style.overflow = "hidden";
         } else {
             document.body.style.overflow = "";
         }
-
-        this.setState({
-            postData
-        })
-        this.setState(({isShowModal}) => ({
-            isShowModal: !isShowModal,
-        }));
-
     }
 
     // form handler
@@ -77,6 +87,16 @@ export default class App extends Component {
                 .replace(/[%&',;=?$\x22 ]+$/, '')
         );
         this.setActivePage(1);
+    }
+
+    postDataHandler = async (e) => {
+        e.preventDefault();
+        const formData = new FormData(e.target);
+        const dataObject = Object.fromEntries(formData.entries());
+        dataObject.id = this.state.postList.length + 1;
+        dataObject.userId = 666;
+        const res = await this.db.postPost(dataObject);
+        console.log(res);
     }
 
     // markup renderers
@@ -136,9 +156,8 @@ export default class App extends Component {
         />
     );
 
-
     render() {
-        const {isShowModal, postData, query} = this.state;
+        const {isShowPostDetailModal, isShowCreatePostModal, postData, query} = this.state;
 
         const renderedNews = this.renderNews();
 
@@ -150,6 +169,7 @@ export default class App extends Component {
                     <SearchForm searchHandler={this.searchHandler}/>
 
                     {this.renderPagePanel(renderedNews.length)}
+                    <Button text="Create" handleClick={this.setShowCreatePostModal}/>
 
                     <div className="grid-container">
                         {renderedNews.length ?
@@ -161,7 +181,8 @@ export default class App extends Component {
 
                 </div>
 
-                {isShowModal && this.showModalHandler(postData)}
+                {isShowPostDetailModal && this.showModalHandler(postData)}
+                {isShowCreatePostModal && (<Overlay> <CreateModal handleSubmit={this.postDataHandler} closeModalHandler={this.setShowCreatePostModal}/> </Overlay>)}
             </React.Fragment>
         );
     }

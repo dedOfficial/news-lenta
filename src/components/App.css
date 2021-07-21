@@ -42,3 +42,7 @@ h1 {
 .page-panel .rc-pagination-options {
     display: none;
 }
+
+.mb-1rem {
+    margin-bottom: 1rem;
+}

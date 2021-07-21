@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 const log = require('./libs/log')(module);
+const bodyParser = require('body-parser');
 
 const PostModel = require('./libs/mongoose').PostModel;
 const PhotoModel = require('./libs/mongoose').PhotoModel;
@@ -11,6 +12,8 @@ const app = express();
 
 app.use(cors());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 const handleFindData = (req, res, err, data) => {
     if (!data) {
@@ -24,6 +27,8 @@ const handleFindData = (req, res, err, data) => {
         return res.send({ error: 'Server error' });
     }
 }
+
+
 
 app.get('/api', (req, res) => {
     res.send('API is running');
@@ -61,6 +66,11 @@ app.get('/api/photos/:id', (req, res) => {
 
 app.get('/api/comments/:postId', (req, res) => {
     return CommentModel.find({postId: req.params.postId}, (err, data) => handleFindData(req, res, err, data));
+});
+
+app.post('/api/posts', (req, res) => {
+    console.log(req.body);
+    res.send(req.body);
 });
 
 app.use((req, res, next) => {
