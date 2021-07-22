@@ -75,11 +75,11 @@ export default class NewsItem extends Component {
         const formData = new FormData(e.target);
         const dataObject = Object.fromEntries(formData.entries());
         dataObject.postId = this.props.postId;
-        const newComment = await this.db.postComment(dataObject, this.props.postId);
-        this.setState(({commentsList}) => ({
-            ...commentsList,
-            newComment
-        }));
+        await this.db.postComment(dataObject);
+        await this.setCommentsList(this.props.postId);
+        await this.props.updatePostList();
+        e.target.reset();
+        this.setShowCreateModal();
     }
 
     createCommentsContent = (flag) => {
@@ -87,7 +87,9 @@ export default class NewsItem extends Component {
         const {query} = this.props
         if (flag) {
             return commentsList.map(({_id, email, body}) => (
-                <Comment key={_id} commentEmail={email} commentBody={body} query={query}/>
+                <Comment key={_id} commentEmail={email} commentBody={body} query={query}
+                         isShowFullContent={this.props.isShowFullContent} commentId={_id}
+                        updateCommentsList={async () => {await this.setCommentsList(this.props.postId)}}/>
             ));
         } else {
             const {email, body} = commentsList[commentsList.length - 1];
@@ -126,6 +128,7 @@ export default class NewsItem extends Component {
                     handleSubmit={this.createComment}
                     closeModalHandler={this.setShowCreateModal}
                     modalTitle="Create New Comment"
+                    type="comment"
                 /></Overlay>}
             </div>
 

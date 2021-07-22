@@ -95,11 +95,10 @@ export default class App extends Component {
         const dataObject = Object.fromEntries(formData.entries());
         dataObject.id = this.state.postList.length + 1;
         dataObject.userId = 666;
-        const newPost = await this.db.postPost(dataObject);
-        this.setState(({ postList }) => ({
-            ...postList,
-            newPost
-        }));
+        await this.db.postPost(dataObject);
+        await this.setPostList();
+        e.target.reset();
+        this.setShowCreatePostModal();
     }
 
     // markup renderers
@@ -111,6 +110,7 @@ export default class App extends Component {
                     postTitle={postTitle}
                     postBody={postBody}
                     closeModalHandler={() => this.setShowPostDetailModal()}
+                    updatePostList={async () => {await this.setPostList()}}
                 />
             </Overlay>
         );

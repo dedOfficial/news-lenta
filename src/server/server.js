@@ -3,6 +3,7 @@ const cors = require('cors');
 const path = require('path');
 const log = require('./libs/log')(module);
 const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
 
 const PostModel = require('./libs/mongoose').PostModel;
 const PhotoModel = require('./libs/mongoose').PhotoModel;
@@ -88,7 +89,12 @@ app.post('/api/comments', (req, res) => {
 
 app.delete('/api/posts/:id', (req, res) => {
     PostModel.remove({id: req.params.id}, (err, data) => handleFindSaveData(req, res, err, data));
-})
+});
+
+app.delete('/api/comments/:id', (req, res) => {
+    CommentModel.findByIdAndDelete(mongoose.Types.ObjectId(req.params.id), null,
+        (err, data) => {handleFindSaveData(req, res, err, data)});
+});
 
 // ############################## Listening etc... ###################################
 

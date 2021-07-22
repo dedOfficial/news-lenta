@@ -2,7 +2,7 @@ import React from 'react';
 import './CreateModal.css';
 import Button from '../button';
 
-export default function CreateModal({modalTitle, handleSubmit, closeModalHandler}) {
+export default function CreateModal({type, modalTitle, handleSubmit, closeModalHandler}) {
     return (
         <section className="create-modal">
             <div
@@ -15,20 +15,43 @@ export default function CreateModal({modalTitle, handleSubmit, closeModalHandler
                     className="form"
                     onSubmit={handleSubmit}
                 >
-                    <div className="form__control">
+                    {type === 'post' ? <div className="form__control">
                         <input
-                            name="title"
-                            id="title"
-                            type="text"
-                            placeholder="What about your dreams?.."
+                        name="title"
+                        id="title"
+                        type="text"
+                        placeholder="What about your dreams?.."
+                        required
                         />
-                    </div>
+                        </div>
+                        :
+                        <React.Fragment>
+                            <div className="form__control">
+                                <input
+                                    name="email"
+                                    id="email"
+                                    type="text"
+                                    placeholder="example@mail.com"
+                                    required
+                                />
+                            </div>
+                            <div className="form__control">
+                                <input
+                                    name="name"
+                                    id="name"
+                                    type="text"
+                                    placeholder="Comment about at..."
+                                    required
+                                />
+                            </div>
+                        </React.Fragment>
+                    }
                     <div className="form__control">
                     <textarea
                         name="body"
                         id="body"
-                        type="text"
                         placeholder="Tell about something..."
+                        required
                     />
                     </div>
                     <div className="form__panel">
@@ -42,5 +65,6 @@ export default function CreateModal({modalTitle, handleSubmit, closeModalHandler
 }
 
 CreateModal.defaultProps = {
-    handleSumbit: () => {}
+    handleSubmit: () => {},
+    type:"post"
 };

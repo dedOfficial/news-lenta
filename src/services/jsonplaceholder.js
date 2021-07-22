@@ -61,8 +61,13 @@ export default class JSONPlaceholder {
     }
 
     postComment = async (newComment, postId) => {
-        const res = await this.#postData(`comments/${postId}`, newComment);
+        const res = await this.#postData(`comments`, newComment);
         return res;
+    }
+
+    deleteComment = async (id) => {
+        const res = await this.#deleteResources(`comments/${id}`);
+        console.log(res);
     }
 
     #transformPostData = ({body, id, title}) => {

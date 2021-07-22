@@ -5,7 +5,7 @@ import NewsItem from "../newsItem";
 import PropTypes from "prop-types";
 
 export default function Modal(props) {
-    const {closeModalHandler, ...newsItemProps} = props;
+    const {closeModalHandler,updatePostList, ...newsItemProps} = props;
 
     return (
         <section className="modal">
@@ -15,6 +15,7 @@ export default function Modal(props) {
             >&times;</div>
             <NewsItem
                 {...newsItemProps}
+                updatePostList={async () => await updatePostList()}
             />
         </section>
     );
