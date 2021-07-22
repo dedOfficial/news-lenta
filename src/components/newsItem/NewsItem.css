@@ -4,3 +4,7 @@
     border-radius: 6px;
     /*min-height: 200px;*/
 }
+
+.news-item .create-modal {
+    width: 90%;
+}

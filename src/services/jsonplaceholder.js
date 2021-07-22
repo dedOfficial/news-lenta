@@ -20,7 +20,16 @@ export default class JSONPlaceholder {
         return await res.json();
     }
 
-    getAllPosts = async (pageNumber) => {
+    #deleteResources = async (page) => {
+        const url = this.#apiBase + page;
+        const fetchOptions = {
+            method: 'DELETE',
+        };
+        const res = await fetch(url, fetchOptions);
+        return await res.json();
+    }
+
+    getAllPosts = async () => {
         const data = await this.#getResources('posts');
         return data.map(this.#transformPostData);
     }
@@ -28,6 +37,11 @@ export default class JSONPlaceholder {
     postPost = async (newPost) => {
         const res = await this.#postData('posts', newPost);
         return res;
+    }
+
+    deletePost = async (postId) => {
+        const res = await this.#deleteResources(`posts/${postId}`);
+        console.log(res);
     }
 
     getPost = async (id) => {
@@ -46,12 +60,17 @@ export default class JSONPlaceholder {
         return comments.map(this.#transformCommentData);
     }
 
+    postComment = async (newComment, postId) => {
+        const res = await this.#postData(`comments/${postId}`, newComment);
+        return res;
+    }
+
     #transformPostData = ({body, id, title}) => {
         return {id, title, body};
     }
 
-    #transformCommentData = ({id, email, body}) => {
-        return {id, email, body};
+    #transformCommentData = ({_id, email, body}) => {
+        return {_id, email, body};
     }
 
     #transformPhotoData = ({thumbnailUrl, url}) => {

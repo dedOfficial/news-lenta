@@ -84,6 +84,12 @@ app.post('/api/comments', (req, res) => {
     comment.save((err, data) => handleFindSaveData(req, res, err, data));
 });
 
+// ############################## DELETE #########################################
+
+app.delete('/api/posts/:id', (req, res) => {
+    PostModel.remove({id: req.params.id}, (err, data) => handleFindSaveData(req, res, err, data));
+})
+
 // ############################## Listening etc... ###################################
 
 app.use((req, res, next) => {
