@@ -61,7 +61,7 @@ export default class NewsItem extends Component {
             ));
         } else {
             const {email, body} = commentsList[commentsList.length - 1];
-            return <Comment commentEmail={email} commentBody={body} query={query}/>
+            return <Comment commentEmail={email} commentBody={body} query={query}/>;
         }
     }
 
@@ -80,7 +80,7 @@ export default class NewsItem extends Component {
                     query={query}
                     postImageURL={isShowFullContent ? url : thumbnailUrl}
                 />
-                {commentsList.length ? this.createCommentsContent(isShowFullContent) : "Загрузка..."}
+                {commentsList.length ? this.createCommentsContent(isShowFullContent) : ""}
             </div>
         );
     }

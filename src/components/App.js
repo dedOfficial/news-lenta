@@ -95,8 +95,11 @@ export default class App extends Component {
         const dataObject = Object.fromEntries(formData.entries());
         dataObject.id = this.state.postList.length + 1;
         dataObject.userId = 666;
-        const res = await this.db.postPost(dataObject);
-        console.log(res);
+        const newPost = await this.db.postPost(dataObject);
+        this.setState(({ postList }) => ({
+            ...postList,
+            newPost
+        }));
     }
 
     // markup renderers
@@ -107,7 +110,7 @@ export default class App extends Component {
                     postId={postId}
                     postTitle={postTitle}
                     postBody={postBody}
-                    closeModalHandler={() => this.setShowModal()}
+                    closeModalHandler={() => this.setShowPostDetailModal()}
                 />
             </Overlay>
         );
@@ -123,7 +126,7 @@ export default class App extends Component {
                         <div
                             key={id}
                             onClick={() => {
-                                this.setShowModal([id, title, body])
+                                this.setShowPostDetailModal([id, title, body])
                             }}
                         >
                             <NewsItem
@@ -182,7 +185,13 @@ export default class App extends Component {
                 </div>
 
                 {isShowPostDetailModal && this.showModalHandler(postData)}
-                {isShowCreatePostModal && (<Overlay> <CreateModal handleSubmit={this.postDataHandler} closeModalHandler={this.setShowCreatePostModal}/> </Overlay>)}
+                {isShowCreatePostModal && (
+                    <Overlay> <CreateModal
+                        handleSubmit={this.postDataHandler}
+                        closeModalHandler={this.setShowCreatePostModal}
+                        modalTitle="Create New Post"
+                    /> </Overlay>
+                )}
             </React.Fragment>
         );
     }

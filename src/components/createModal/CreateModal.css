@@ -1,8 +1,10 @@
-.modal {
+.create-modal {
     width: 50vw;
-    height: 80vh;
+    height: 570px;
     display: flex;
+    flex-direction: column;
     justify-content: center;
+    align-items: center;
 
     position: relative;
     top: 50%;
@@ -18,7 +20,7 @@
     padding: 15px;
 }
 
-.modal__close {
+.create-modal__close {
     position: absolute;
     top: 0;
     right: 15px;
@@ -31,7 +33,8 @@
 }
 
 .create-form {
-    width: 95%;
+    width: 100%;
+    height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -49,6 +52,7 @@
 
 .create-form .form .form__control {
     width: 80%;
+
 }
 
 input, textarea {
@@ -67,4 +71,8 @@ input, textarea {
     display: flex;
     justify-content: space-between;
     /*align-items: center;*/
+}
+
+h3 {
+    text-align: center;
 }

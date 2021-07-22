@@ -2,13 +2,14 @@ import React from 'react';
 import './CreateModal.css';
 import Button from '../button';
 
-export default function CreateModal({handleSubmit, closeModalHandler}) {
+export default function CreateModal({modalTitle, handleSubmit, closeModalHandler}) {
     return (
-        <section className="modal">
+        <section className="create-modal">
             <div
-                className="modal__close"
+                className="create-modal__close"
                 onClick={closeModalHandler}
             >&times;</div>
+            <h3> {modalTitle} </h3>
             <div className="create-form">
                 <form
                     className="form"
