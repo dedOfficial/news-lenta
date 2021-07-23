@@ -6,9 +6,7 @@ import PropTypes from "prop-types";
 import Button from "../button";
 import JSONPlaceholder from "../../services/jsonplaceholder";
 
-export default function Comment({commentEmail, commentBody, query, isShowFullContent, commentId, updateCommentsList}) {
-
-
+export default function Comment({commentEmail, commentBody, query, isShowFullContent, postId, commentId, updateCommentsList}) {
     return (
         <article className="comment">
             <h4 className="comment__author">{highlightFiltered(query, commentEmail)}</h4>
@@ -16,19 +14,19 @@ export default function Comment({commentEmail, commentBody, query, isShowFullCon
                 {highlightFiltered(query, commentBody)}
             </p>
             {isShowFullContent && <Button text="Delete Comment"
-                                          handleClick={async () => {await deleteComment(commentId, updateCommentsList)}}/>}
+                                          handleClick={async () => {await deleteComment(postId, commentId, updateCommentsList)}}/>}
         </article>
     );
 }
 
 const db = new JSONPlaceholder();
 
-async function deleteComment(id, cb) {
+async function deleteComment(postId, id, cb) {
     // eslint-disable-next-line no-restricted-globals
     const isDelete = confirm('Are you sure?');
     try {
         if (isDelete) {
-            await db.deleteComment(id);
+            await db.deleteComment(postId, id);
             await cb();
         }
     } catch (e) {

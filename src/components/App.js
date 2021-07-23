@@ -53,10 +53,13 @@ export default class App extends Component {
         })
     }
 
-    setShowPostDetailModal = (postData) => {
+    setPostData = (postData) => {
         this.setState({
             postData
         })
+    }
+
+    setShowPostDetailModal = () => {
         this.setState(({isShowPostDetailModal}) => ({
             isShowPostDetailModal: !isShowPostDetailModal,
         }));
@@ -93,7 +96,7 @@ export default class App extends Component {
         e.preventDefault();
         const formData = new FormData(e.target);
         const dataObject = Object.fromEntries(formData.entries());
-        dataObject.id = this.state.postList.length + 1;
+        dataObject.id = 100 + this.state.postList.length;
         dataObject.userId = 666;
         await this.db.postPost(dataObject);
         await this.setPostList();
@@ -109,7 +112,10 @@ export default class App extends Component {
                     postId={postId}
                     postTitle={postTitle}
                     postBody={postBody}
-                    closeModalHandler={() => this.setShowPostDetailModal()}
+                    closeModalHandler={() => {
+                        this.setShowPostDetailModal();
+                    }}
+                    updatePost={(postData) => {this.setPostData(postData)}}
                     updatePostList={async () => {await this.setPostList()}}
                 />
             </Overlay>
@@ -126,7 +132,8 @@ export default class App extends Component {
                         <div
                             key={id}
                             onClick={() => {
-                                this.setShowPostDetailModal([id, title, body])
+                                this.setShowPostDetailModal()
+                                this.setPostData([id, title, body])
                             }}
                         >
                             <NewsItem

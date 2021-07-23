@@ -91,10 +91,36 @@ app.delete('/api/posts/:id', (req, res) => {
     PostModel.remove({id: req.params.id}, (err, data) => handleFindSaveData(req, res, err, data));
 });
 
-app.delete('/api/comments/:id', (req, res) => {
-    CommentModel.findByIdAndDelete(mongoose.Types.ObjectId(req.params.id), null,
+app.delete('/api/comments/:postId', (req, res) => {
+    CommentModel.deleteMany({postId: req.params.postId}, null,(err, data) => {handleFindSaveData(req, res, err, data)});
+});
+
+app.delete('/api/comments/:postId/:id', (req, res) => {
+    CommentModel
+        .find({postId: req.params.postId})
+        .deleteOne({_id: mongoose.Types.ObjectId(req.params.id)}, null,
         (err, data) => {handleFindSaveData(req, res, err, data)});
 });
+
+// #################################### UPDATE ######################################
+
+app.put('/api/posts/:id', (req, res) => {
+    PostModel.updateOne(
+        {id: req.params.id},
+        req.body,
+        null,
+        (err, data) => {handleFindSaveData(req, res, err, data)}
+    );
+})
+
+app.put('/api/comments/:id', (req, res) => {
+    CommentModel.updateOne(
+        {_id: mongoose.Types.ObjectId(req.params.id)},
+        req.body,
+        null,
+        (err, data) => {handleFindSaveData(req, res, err, data)}
+    );
+})
 
 // ############################## Listening etc... ###################################
 

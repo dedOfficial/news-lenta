@@ -26,7 +26,8 @@ export default class NewsItem extends Component {
     state = {
         commentsList: [],
         postPhoto: {},
-        isShowCreateModal: false
+        isShowCreateModal: false,
+        isShowUpdateModal: false
     }
 
     componentDidMount() {
@@ -62,12 +63,26 @@ export default class NewsItem extends Component {
         try {
             if (isDelete) {
                 await this.db.deletePost(this.props.postId);
+                await this.db.deleteComments(this.props.postId);
                 window.localStorage.setItem('activePage', '1');
                 window.location.reload();
             }
         } catch (e) {
             console.error(e)
         }
+    }
+
+    updatePost = async (e) => {
+        e.preventDefault();
+        const formData = new FormData(e.target);
+        const dataObject = Object.fromEntries(formData.entries());
+        dataObject.userId = 666;
+        dataObject.id = this.props.postId;
+        await this.db.updatePost(this.props.postId, dataObject);
+        this.props.updatePost([dataObject.id, dataObject.title, dataObject.body]);
+        await this.props.updatePostList();
+        e.target.reset();
+        this.setShowUpdateModal();
     }
 
     createComment = async (e) => {
@@ -89,6 +104,7 @@ export default class NewsItem extends Component {
             return commentsList.map(({_id, email, body}) => (
                 <Comment key={_id} commentEmail={email} commentBody={body} query={query}
                          isShowFullContent={this.props.isShowFullContent} commentId={_id}
+                         postId={this.props.postId}
                         updateCommentsList={async () => {await this.setCommentsList(this.props.postId)}}/>
             ));
         } else {
@@ -103,6 +119,12 @@ export default class NewsItem extends Component {
         }));
     }
 
+    setShowUpdateModal = () => {
+        this.setState(({isShowUpdateModal}) => ({
+            isShowUpdateModal: !isShowUpdateModal
+        }));
+    }
+
     render() {
         const {postTitle, postBody, isShowFullContent, query} = this.props;
         const {commentsList, postPhoto, isShowCreateModal} = this.state;
@@ -113,6 +135,7 @@ export default class NewsItem extends Component {
 
             <div className="news-item">
                 {isShowFullContent && <Button text="Delete" handleClick={this.deletePost}/>}
+                {isShowFullContent && <Button text="Edit" handleClick={this.setShowUpdateModal}/>}
                 <PostItem
                     postTitle={postTitle}
                     postBody={postBody}
@@ -123,6 +146,18 @@ export default class NewsItem extends Component {
                 {isShowFullContent && <Button text="New Comment" handleClick={this.setShowCreateModal}/>}
                 {commentsList.length ? this.createCommentsContent(isShowFullContent) : ""}
 
+                {this.state.isShowUpdateModal && <Overlay>
+                    <CreateModal
+                        handleSubmit={this.updatePost}
+                        closeModalHandler={this.setShowUpdateModal}
+                        modalTitle="Edit Comment"
+                        type="post"
+                        values={{
+                            title: postTitle,
+                            body: postBody
+                        }}
+                    />
+                </Overlay>}
 
                 {isShowCreateModal && <Overlay><CreateModal
                     handleSubmit={this.createComment}

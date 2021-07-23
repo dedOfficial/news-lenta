@@ -29,6 +29,19 @@ export default class JSONPlaceholder {
         return await res.json();
     }
 
+    #updateResource = async (page, updateData) => {
+        const url = this.#apiBase + page;
+        const fetchOptions = {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(updateData)
+        };
+        const res = await fetch(url, fetchOptions);
+        return await res.json();
+    }
+
     getAllPosts = async () => {
         const data = await this.#getResources('posts');
         return data.map(this.#transformPostData);
@@ -36,6 +49,12 @@ export default class JSONPlaceholder {
 
     postPost = async (newPost) => {
         const res = await this.#postData('posts', newPost);
+        return res;
+    }
+
+    updatePost = async (id, updatePost) => {
+        const res = await this.#updateResource(`posts/${id}`, updatePost);
+        console.log(res);
         return res;
     }
 
@@ -65,8 +84,13 @@ export default class JSONPlaceholder {
         return res;
     }
 
-    deleteComment = async (id) => {
-        const res = await this.#deleteResources(`comments/${id}`);
+    deleteComment = async (postId, id) => {
+        const res = await this.#deleteResources(`comments/${postId}/${id}`);
+        console.log(res);
+    }
+
+    deleteComments = async (postId) => {
+        const res = await this.#deleteResources(`comments/${postId}`)
         console.log(res);
     }
 

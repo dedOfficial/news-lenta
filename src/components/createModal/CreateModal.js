@@ -2,7 +2,7 @@ import React from 'react';
 import './CreateModal.css';
 import Button from '../button';
 
-export default function CreateModal({type, modalTitle, handleSubmit, closeModalHandler}) {
+export default function CreateModal({type, modalTitle, handleSubmit, closeModalHandler, values}) {
     return (
         <section className="create-modal">
             <div
@@ -15,14 +15,16 @@ export default function CreateModal({type, modalTitle, handleSubmit, closeModalH
                     className="form"
                     onSubmit={handleSubmit}
                 >
-                    {type === 'post' ? <div className="form__control">
-                        <input
-                        name="title"
-                        id="title"
-                        type="text"
-                        placeholder="What about your dreams?.."
-                        required
-                        />
+                    {type === 'post' ?
+                        <div className="form__control">
+                            <input
+                                name="title"
+                                id="title"
+                                type="text"
+                                placeholder="What about your dreams?.."
+                                defaultValue={values ? values.title : ""}
+                                required
+                            />
                         </div>
                         :
                         <React.Fragment>
@@ -51,6 +53,7 @@ export default function CreateModal({type, modalTitle, handleSubmit, closeModalH
                         name="body"
                         id="body"
                         placeholder="Tell about something..."
+                        defaultValue={values ? values.body : ""}
                         required
                     />
                     </div>
